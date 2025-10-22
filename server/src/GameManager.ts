@@ -1,4 +1,3 @@
-
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { INIT_GAME } from "./messages";
@@ -27,9 +26,8 @@ export class GameManager {
       const message = JSON.parse(data.toString()); //ensures that our message is a string and not json
       if (message.type === INIT_GAME) {
         if (this.pendingUser) {
-            
         } else {
-          this.pendingUser = socket;    
+          this.pendingUser = socket;
         }
       }
     });

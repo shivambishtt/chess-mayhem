@@ -1,7 +1,6 @@
 import { Chess } from "chess.js";
 import { WebSocket } from "ws";
 import { GAME_OVER, INIT_GAME, MOVE } from "./messages";
-import { color } from "./types";
 
 export class Game {
   private game: Game[];
@@ -55,7 +54,7 @@ export class Game {
         payload: { winner },
       });
 
-      [this.player1, this.player2].forEach((player) => player.emit(message));
+      [this.player1, this.player2].forEach((player) => player.send(message));
     }
 
     //player 1 or 2 moves

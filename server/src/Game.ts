@@ -3,13 +3,13 @@ import { WebSocket } from "ws";
 import { GAME_OVER, INIT_GAME, MOVE } from "./messages";
 
 export class Game {
-  private game: Game[];
+  private game: Game[] = [];
   private player1: WebSocket;
   private player2: WebSocket;
   private board: Chess;
   private moves: string[];
   private startTime: Date;
-  private moveCount: 0;
+  private moveCount: number = 0;
 
   constructor(player1: WebSocket, player2: WebSocket) {
     (this.player1 = player1),

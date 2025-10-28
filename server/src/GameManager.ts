@@ -4,8 +4,8 @@ import { INIT_GAME } from "./messages";
 
 export class GameManager {
   private games: Game[];
-  private users: WebSocket[];
-  private pendingUser: WebSocket;
+  private users: WebSocket[] = [];
+  private pendingUser: WebSocket | null = null;
 
   constructor() {
     this.games = [];

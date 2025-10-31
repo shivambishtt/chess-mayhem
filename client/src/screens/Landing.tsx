@@ -1,27 +1,40 @@
-import React from "react";
 import chessboard from "../assets/chessboard.png";
+import { useNavigate } from "react-router-dom";
 
 function Landing() {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div>
+    <div className="main flex flex-row items-center justify-center h-screen">
+      <div className="flex-1 flex justify-center">
         <img
           src={chessboard}
-          className="w-2/3 h-full object-cover rounded-lg"
+          className="w-2/2 h-full object-cover rounded-lg"
           alt="chess"
           loading="lazy"
         />
       </div>
-      <div className="flex">
-        <h1 className="text-4xl font-bold ">
+      <div className="flex-1 flex flex-col items-center">
+        <h1 className="text-4xl font-bold text-center">
           Play Chess. <br />
-          Improve your game and have fun.
+          Improve your game.
         </h1>
-        <p>Join a room to play chess with your friends.</p>
-        <button>Get Started</button>
-      </div>
-      <div>
-        <button className="bg-green-600 text-white p-2 rounded-md">Play Online</button>
+        <div className="right mt-4 flex flex-col items-center">
+          <p className="mb-2">Join a room to play chess with your friends.</p>
+          <button className="bg-lime-500  font-semibold mb-2 px-30 py-3  text-white rounded-md">
+            <div></div>
+            Get Started
+          </button>
+          <button
+    
+          onClick={()=>{
+            navigate("/game")
+          }}
+            className="bg-lime-500 font-semibold text-white rounded-md px-30 py-3"
+          >
+            Play Online
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -4,15 +4,16 @@ import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Landing from "./screens/Landing.tsx";
+import Online from "./screens/Online.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Landing />,
   },
-  // {
-  //   path: "/game",
-  //   element: <Game />,
-  // },
+  {
+    path: "/online",
+    element: <Online />,
+  },
 ]);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

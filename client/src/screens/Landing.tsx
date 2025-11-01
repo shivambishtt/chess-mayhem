@@ -26,10 +26,9 @@ function Landing() {
             Get Started
           </button>
           <button
-    
-          onClick={()=>{
-            navigate("/game")
-          }}
+            onClick={() => {
+              navigate("/game");
+            }}
             className="bg-lime-500 font-semibold text-white rounded-md px-30 py-3"
           >
             Play Online

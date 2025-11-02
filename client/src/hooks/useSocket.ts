@@ -18,6 +18,6 @@ export const useSocket = () => {
     return () => {
       ws.close();
     };
-  }, [socket]);
+  }, []);
   return socket;
 };

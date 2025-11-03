@@ -1,11 +1,18 @@
-import React from 'react'
+import type { Color, PieceSymbol, Square } from "chess.js";
+import React from "react";
 
-function Chessboard() {
-  return (
-    <div className='text-white'>
-      Chessboard
-    </div>
-  )
+function Chessboard({
+  board,
+}: {
+  board:
+    | {
+        square: Square;
+        type: PieceSymbol;
+        color: Color;
+      }
+    | null[][];
+}) {
+  return <div className="text-white">{children}</div>;
 }
 
-export default Chessboard
+export default Chessboard;

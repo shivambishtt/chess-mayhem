@@ -10,8 +10,8 @@ export const GAME_OVER = "game_over";
 
 function Online() {
   const socket = useSocket();
-  const [board, setBoard] = useState(new Chess());
-  const [ascii, setAscii] = useState(board.board());
+  const [chess, setChess] = useState(new Chess()); // initialized chess instance
+  const [chessBoard, setChessboard] = useState(chess.board());
 
   useEffect(() => {
     if (!socket) {
@@ -19,17 +19,18 @@ function Online() {
     }
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log(message);
 
       switch (message.type) {
         case INIT_GAME:
-          setBoard(new Chess());
+          setChess(new Chess());
+          setChessboard(chess.board());
           console.log("Game initialized");
           break;
 
         case MOVE: {
-          const move = message.payload; 
-          board.move(move);
+          const move = message.payload;
+          chess.move(move);
+          setChessboard(chess.board());
           console.log("Move made");
           break;
         }
@@ -49,7 +50,7 @@ function Online() {
       <div className="pt-8 max-w-5xl  w-full">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="bg-green-500 ">
-            <Chessboard />
+            <Chessboard board={chessBoard} />
           </div>
           <Button
             onClick={() => {

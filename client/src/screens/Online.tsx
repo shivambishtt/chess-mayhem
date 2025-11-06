@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Chessboard from "../components/Chessboard";
+import { Chessboard } from "../components/Chessboard";
 import Button from "../components/Button";
 import { useSocket } from "../hooks/useSocket";
 import { Chess } from "chess.js";
@@ -40,7 +40,7 @@ function Online() {
           break;
       }
     };
-  }, [socket, board]);
+  }, [chess, socket]);
 
   if (!socket || socket === null) {
     return <div>Connecting....</div>;

@@ -1,29 +1,53 @@
 import type { Color, PieceSymbol, Square } from "chess.js";
+import { useState } from "react";
 
 export const Chessboard = ({
   board,
+  socket,
 }: {
   board: ({ square: Square; type: PieceSymbol; color: Color } | null)[][];
+  socket: WebSocket;
 }) => {
+  const [from, setFrom] = useState<null | Square>(null);
+  const [to, setTo] = useState<null | Square>(null);
   return (
     <div className="text-black">
+      {/* logic for row */}
       {board.map((row, i) => {
         return (
           <div
             key={i}
             className="flex items-center justify-center overflow-hidden"
           >
-            {row.map((square, j) => {
+            {/* logic for column */}
+            {row.map((column, j) => {
               return (
                 <div
+                  onClick={() => {
+                    if (!from) {
+                      setFrom(column?.square || null);
+                    } else {
+                      setTo(column?.square || null);
+                      socket.send(
+                        JSON.stringify({
+                          type: "move",
+                          payload: {
+                            from, // current address of the piece
+                            to: column?.square || null, //next address of the piece
+                          },
+                        })
+                      );
+                    }
+                  }}
                   key={j}
                   className={`w-15 h-14 ${
                     (i + j) % 2 === 0 ? "bg-emerald-700" : "bg-amber-100"
                   }`}
                 >
+                  {/* Content of column */}
                   <div className="w-full flex justify-center items-center h-full">
                     <div className="flex justify-center ">
-                      {square ? square.type : " "}
+                      {column ? column.type : " "}
                     </div>
                   </div>
                 </div>

@@ -50,7 +50,7 @@ function Online() {
       <div className="pt-8 max-w-5xl  w-full">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex items-center w-full col-span-2 ">
-            <Chessboard  board={chessBoard} />
+            <Chessboard socket={socket} board={chessBoard} />
             <Button
               onClick={() => {
                 socket.send(

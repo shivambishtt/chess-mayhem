@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Chessboard } from "../components/Chessboard";
 import Button from "../components/Button";
 import { useSocket } from "../hooks/useSocket";

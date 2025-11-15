@@ -3,30 +3,27 @@ import { WebSocket } from "ws";
 import { GAME_OVER, INIT_GAME, MOVE } from "./messages";
 
 export class Game {
-  private game: Game[] = [];
-  private player1: WebSocket;
-  private player2: WebSocket;
+  public player1: WebSocket;
+  public player2: WebSocket;
   private board: Chess;
-  private moves: string[];
-  private startTime: Date;
-  private moveCount: number = 0;
 
   constructor(player1: WebSocket, player2: WebSocket) {
-    (this.player1 = player1),
-      (this.player2 = player2),
-      (this.board = new Chess());
-    this.moves = [];
-    this.startTime = new Date();
+    this.player1 = player1;
+    this.player2 = player2;
+    this.board = new Chess();
 
+    // Send init to both players
     [this.player1, this.player2].forEach((player, index) => {
+      if (!player) {
+        console.error("Player is null");
+        return;
+      }
+
       const color = index === 0 ? "white" : "black";
-      player.send(
-        JSON.stringify({
-          type: INIT_GAME,
-          payload: { color },
-        })
-      );
+      player.send(JSON.stringify({ type: INIT_GAME, payload: { color } }));
     });
+
+    console.log("INIT_GAME sent to both players");
   }
 
   makeMove(
@@ -36,10 +33,10 @@ export class Game {
       to: string;
     }
   ) {
-    if (this.moveCount % 2 === 0 && socket !== this.player1) {
+    if (this.board.moves.length % 2 === 0 && socket !== this.player1) {
       return;
     }
-    if (this.moveCount % 2 === 1 && socket !== this.player2) {
+    if (this.board.moves.length % 2 === 1 && socket !== this.player2) {
       return;
     }
     try {
@@ -74,6 +71,5 @@ export class Game {
         })
       );
     }
-    this.moveCount++;
   }
 }

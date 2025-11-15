@@ -1,5 +1,6 @@
 import type { Color, PieceSymbol, Square } from "chess.js";
 import { useState } from "react";
+import { MOVE } from "../screens/Online";
 
 export const Chessboard = ({
   board,
@@ -30,13 +31,14 @@ export const Chessboard = ({
                       setTo(column?.square || null);
                       socket.send(
                         JSON.stringify({
-                          type: "move",
+                          type: MOVE,
                           payload: {
                             from, // current address of the piece
                             to: column?.square || null, //next address of the piece
                           },
                         })
                       );
+                      console.log({ from, to });
                     }
                   }}
                   key={j}

@@ -17,13 +17,10 @@ export class Game {
       if (!player) {
         console.error("Player is null");
         return;
-      }
-
+      } 
       const color = index === 0 ? "white" : "black";
       player.send(JSON.stringify({ type: INIT_GAME, payload: { color } }));
     });
-
-    console.log("INIT_GAME sent to both players");
   }
 
   makeMove(

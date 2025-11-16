@@ -28,13 +28,14 @@ export const Chessboard = ({
                     if (!from) {
                       setFrom(column?.square || null);
                     } else {
-                      setTo(column?.square || null);
+                      const nextSquare = column?.square || null; //next move to
+                      setTo(nextSquare);
                       socket.send(
                         JSON.stringify({
                           type: MOVE,
                           payload: {
                             from, // current address of the piece
-                            to: column?.square || null, //next address of the piece
+                            to: nextSquare, //next address of the piece
                           },
                         })
                       );

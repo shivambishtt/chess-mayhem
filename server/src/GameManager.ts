@@ -1,11 +1,13 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { INIT_GAME, MOVE } from "./messages";
+import { Chess } from "chess.js";
 
 export class GameManager {
   private games: Game[];
   private users: WebSocket[] = [];
   private pendingUser: WebSocket | null = null;
+  private chess: any;
 
   constructor() {
     this.games = [];
@@ -25,10 +27,9 @@ export class GameManager {
     socket.on("message", (data) => {
       const message = JSON.parse(data.toString()); //ensures that our message is a string and not json
       if (message.type === INIT_GAME) {
-        const game = new Game(this.pendingUser!, socket);
-        this.pendingUser = null;
-        this.games.push(game);
         if (this.pendingUser) {
+          const game = new Game(this.pendingUser!, socket);
+          this.games.push(game);
           this.pendingUser = null;
         } else {
           this.pendingUser = socket;

@@ -11,6 +11,8 @@ export const Chessboard = ({
 }) => {
   const [from, setFrom] = useState<null | Square>(null);
   const [to, setTo] = useState<null | Square>(null);
+
+
   return (
     <div className="text-black">
       {/* logic for row */}
@@ -22,24 +24,27 @@ export const Chessboard = ({
           >
             {/* logic for column */}
             {row.map((column, j) => {
+              const squareRepresentation = (String.fromCharCode(65 + (j % 8)) +
+                "" +
+                (8 - i)) as Square;
               return (
                 <div
                   onClick={() => {
                     if (!from) {
-                      setFrom(column?.square || null);
+                      setFrom(squareRepresentation);
                     } else {
-                      const nextSquare = column?.square || null; //next move to
-                      setTo(nextSquare);
                       socket.send(
                         JSON.stringify({
                           type: MOVE,
                           payload: {
                             from, // current address of the piece
-                            to: nextSquare, //next address of the piece
+                            to: squareRepresentation, //next address of the piece
                           },
                         })
                       );
-                      console.log({ from, to });
+                      console.log({ from, to:squareRepresentation });
+                      setFrom(null);
+                      
                     }
                   }}
                   key={j}

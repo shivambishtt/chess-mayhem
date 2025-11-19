@@ -22,7 +22,6 @@ function Online() {
 
       switch (message.type) {
         case INIT_GAME:
-          setChess(new Chess());
           setChessboard(chess.board());
           console.log("Game initialized");
           break;

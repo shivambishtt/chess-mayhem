@@ -27,12 +27,10 @@ export class Game {
   // validate turn
   const turn = this.board.turn(); // "w" or "b"
   if (turn === "w" && socket !== this.player1){
-    console.log("White's turn");
     return;
     
   }
   if (turn === "b" && socket !== this.player2) {
-    console.log("Black's turn");
     return;
   }
 

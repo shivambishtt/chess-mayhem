@@ -11,6 +11,28 @@ export const Chessboard = ({
 }) => {
   const [from, setFrom] = useState<null | Square>(null);
 
+  const pieceToChar = (piece: PieceSymbol, color: Color): string => {
+    const symbols: Record<Color, Record<PieceSymbol, string>> = {
+      w: {
+        p: "♙",
+        r: "♖",
+        n: "♘",
+        b: "♗",
+        k: "♔",
+        q: "♕",
+      },
+      b: {
+        p: "♟",
+        r: "♜",
+        n: "♞",
+        b: "♝",
+        k: "♚",
+        q: "♛",
+      },
+    };  
+    return symbols[color][piece];
+  };
+
   return (
     <div className="text-black">
       {/* logic for row */}
@@ -35,14 +57,16 @@ export const Chessboard = ({
                         JSON.stringify({
                           type: MOVE,
                           payload: {
-                            from:from.toLowerCase(), // current address of the piece
+                            from: from.toLowerCase(), // current address of the piece
                             to: squareRepresentation.toLowerCase(), //next address of the piece
                           },
                         })
                       );
-                      console.log({ from:from.toLowerCase(), to: squareRepresentation.toLowerCase() });
+                      console.log({
+                        from: from.toLowerCase(),
+                        to: squareRepresentation.toLowerCase(),
+                      });
                       setFrom(null);
-                      
                     }
                   }}
                   key={j}
@@ -53,7 +77,7 @@ export const Chessboard = ({
                   {/* Content of column */}
                   <div className="w-full flex justify-center items-center h-full">
                     <div className="flex justify-center ">
-                      {column ? column.type : " "}
+                      {column ? pieceToChar(column.type, column.color) : " "}
                     </div>
                   </div>
                 </div>

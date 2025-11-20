@@ -10,8 +10,6 @@ export const Chessboard = ({
   socket: WebSocket;
 }) => {
   const [from, setFrom] = useState<null | Square>(null);
-  const [to, setTo] = useState<null | Square>(null);
-
 
   return (
     <div className="text-black">
@@ -31,18 +29,18 @@ export const Chessboard = ({
                 <div
                   onClick={() => {
                     if (!from) {
-                      setFrom(squareRepresentation);
+                      setFrom(squareRepresentation.toLowerCase() as Square);
                     } else {
                       socket.send(
                         JSON.stringify({
                           type: MOVE,
                           payload: {
-                            from, // current address of the piece
-                            to: squareRepresentation, //next address of the piece
+                            from:from.toLowerCase(), // current address of the piece
+                            to: squareRepresentation.toLowerCase(), //next address of the piece
                           },
                         })
                       );
-                      console.log({ from, to:squareRepresentation });
+                      console.log({ from:from.toLowerCase(), to: squareRepresentation.toLowerCase() });
                       setFrom(null);
                       
                     }

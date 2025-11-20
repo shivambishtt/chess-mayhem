@@ -52,6 +52,7 @@ function Online() {
             <Chessboard socket={socket} board={chessBoard} />
             <Button
               onClick={() => {
+                console.log("Clicked");
                 socket.send(
                   JSON.stringify({
                     type: INIT_GAME,

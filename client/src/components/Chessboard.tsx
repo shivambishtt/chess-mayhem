@@ -11,27 +11,6 @@ export const Chessboard = ({
 }) => {
   const [from, setFrom] = useState<null | Square>(null);
 
-  const pieceToChar = (piece: PieceSymbol, color: Color): string => {
-    const symbols: Record<Color, Record<PieceSymbol, string>> = {
-      w: {
-        p: "♙",
-        r: "♖",
-        n: "♘",
-        b: "♗",
-        k: "♔",
-        q: "♕",
-      },
-      b: {
-        p: "♟",
-        r: "♜",
-        n: "♞",
-        b: "♝",
-        k: "♚",
-        q: "♛",
-      },
-    };  
-    return symbols[color][piece];
-  };
 
   return (
     <div className="text-black">
@@ -77,7 +56,7 @@ export const Chessboard = ({
                   {/* Content of column */}
                   <div className="w-full flex justify-center items-center h-full">
                     <div className="flex justify-center ">
-                      {column ? pieceToChar(column.type, column.color) : " "}
+                      {column ? <img  className="size-12" src={`/${column.color}${column.type}.png`} alt="" /> : " "}
                     </div>
                   </div>
                 </div>

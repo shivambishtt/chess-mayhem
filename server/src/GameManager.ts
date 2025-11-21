@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { INIT_GAME, MOVE } from "./messages";
-import { Chess } from "chess.js";
+import { prisma } from "./db/prisma";
 
 export class GameManager {
   private games: Game[];
@@ -24,13 +24,21 @@ export class GameManager {
   }
 
   private addHandler(socket: WebSocket) {
-    socket.on("message", (data) => {
+    socket.on("message", async (data) => {
       const message = JSON.parse(data.toString()); //ensures that our message is a string and not json
       if (message.type === INIT_GAME) {
         if (!this.pendingUser) {
           this.pendingUser = socket;
         } else {
-          const game = new Game(this.pendingUser, socket);
+      const game = new Game(this.pendingUser, socket);
+          const dbgame = await prisma.game.create({
+            data:{
+              player1Id:crypto.randomUUID(),
+              player2Id:crypto.randomUUID(),
+              
+            }
+          });
+
           this.games.push(game);
           this.pendingUser = null;
         }

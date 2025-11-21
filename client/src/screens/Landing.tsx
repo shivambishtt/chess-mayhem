@@ -21,15 +21,15 @@ function Landing() {
         </h1>
         <div className="right mt-4 flex flex-col items-center">
           <p className="mb-2">Join a room to play chess with your friends.</p>
-          <button className="bg-lime-500  font-semibold mb-2 px-30 py-3  text-white rounded-md">
+          <button className="bg-emerald-600  font-semibold mb-2 px-30 py-3  text-white rounded-md">
             <div></div>
             Get Started
           </button>
           <button
             onClick={() => {
-              navigate("/game");
+              navigate("/online");
             }}
-            className="bg-lime-500 font-semibold text-white rounded-md px-30 py-3"
+            className="bg-emerald-600 font-semibold text-white rounded-md px-30 py-3"
           >
             Play Online
           </button>

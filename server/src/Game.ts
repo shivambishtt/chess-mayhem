@@ -7,11 +7,13 @@ export class Game {
   public player1: WebSocket;
   public player2: WebSocket;
   private board: Chess;
+  public id: string;
 
   constructor(player1: WebSocket, player2: WebSocket) {
     this.player1 = player1;
     this.player2 = player2;
     this.board = new Chess();
+    this.id = randomUUID();
 
     // Send init to both players
     [this.player1, this.player2].forEach((player, index) => {
@@ -23,7 +25,6 @@ export class Game {
       player.send(JSON.stringify({ type: INIT_GAME, payload: { color } }));
     });
   }
-
 
   async makeMove(socket: WebSocket, move: { from: string; to: string }) {
     // validate turn
@@ -64,6 +65,6 @@ export class Game {
       this.player1.send(overMsg);
       this.player2.send(overMsg);
     }
+    return move;
   }
-
 }

@@ -1,7 +1,6 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { INIT_GAME, MOVE } from "./messages";
-import { prisma } from "./db/prisma";
 
 export class GameManager {
   private games: Game[];
@@ -30,14 +29,8 @@ export class GameManager {
         if (!this.pendingUser) {
           this.pendingUser = socket;
         } else {
-      const game = new Game(this.pendingUser, socket);
-          const dbgame = await prisma.game.create({
-            data:{
-              player1Id:crypto.randomUUID(),
-              player2Id:crypto.randomUUID(),
-              
-            }
-          });
+          const game = new Game(this.pendingUser, socket);
+          // new game created add in db
 
           this.games.push(game);
           this.pendingUser = null;
@@ -49,7 +42,9 @@ export class GameManager {
           (game) => game.player1 === socket || game.player2 === socket
         );
         if (game) {
-          game.makeMove(socket, message.payload);
+          //user moves store it in moves table which has foreign key to game table
+          const move = await game.makeMove(socket, message.payload);
+          return move;
         }
       }
     });

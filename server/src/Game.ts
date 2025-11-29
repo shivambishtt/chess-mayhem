@@ -26,6 +26,10 @@ export class Game {
     });
   }
 
+
+  // write code if that's not a player turn he cant move
+
+
   async makeMove(socket: WebSocket, move: { from: string; to: string }) {
     // validate turn
     const turn = this.board.turn(); // "w" or "b"

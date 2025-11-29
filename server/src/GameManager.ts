@@ -1,6 +1,9 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { INIT_GAME, MOVE } from "./messages";
+import { Move } from "./models/MoveModel";
+import { GameModel } from "./models/GameModel";
+
 
 export class GameManager {
   private games: Game[];
@@ -31,6 +34,7 @@ export class GameManager {
         } else {
           const game = new Game(this.pendingUser, socket);
           // new game created add in db
+          await Game
 
           this.games.push(game);
           this.pendingUser = null;
@@ -44,6 +48,14 @@ export class GameManager {
         if (game) {
           //user moves store it in moves table which has foreign key to game table
           const move = await game.makeMove(socket, message.payload);
+          if (move) {
+            const moveCreated = await Move.create({
+              gameId: game.id,
+              from: move.from,
+              to: move.to,
+            });
+            return moveCreated;
+          }
           return move;
         }
       }

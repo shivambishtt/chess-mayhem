@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
 import { v4 as uuid } from "uuid";
 
-const MoveSchema = new mongoose.Schema(
+interface IMove{
+  gameId:string,
+  from:string,
+  to:string,
+  piece?:string,
+  color?:string,
+  timestamps?:Date
+}
+
+const MoveSchema = new mongoose.Schema<IMove>(
   {
-    gameId:{
-        type:uuid,
-    },
     from:{
         type:String,
         required:true
@@ -27,4 +33,4 @@ const MoveSchema = new mongoose.Schema(
   }
 );
  
-export const Move = mongoose.model("Move",MoveSchema);
+export const Move = mongoose.model<IMove>("Move",MoveSchema);

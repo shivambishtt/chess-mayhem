@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 interface IGame extends mongoose.Document {
+  gameId:string;
   playerWhite: string;
   playerBlack: string;
   moves: Array<string>;
@@ -9,6 +10,11 @@ interface IGame extends mongoose.Document {
 }
 
 const GameSchema = new mongoose.Schema<IGame>({
+  gameId:{
+    type:String,
+    required:true,
+    unique:true
+  },
   playerWhite: {
     type: String,
     required: true,

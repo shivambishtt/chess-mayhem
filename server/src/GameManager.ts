@@ -4,7 +4,6 @@ import { INIT_GAME, MOVE } from "./messages";
 import { Move } from "./models/MoveModel";
 import { GameModel } from "./models/GameModel";
 
-
 export class GameManager {
   private games: Game[];
   private users: WebSocket[] = [];
@@ -34,8 +33,12 @@ export class GameManager {
         } else {
           const game = new Game(this.pendingUser, socket);
           // new game created add in db
-          await Game
 
+          await GameModel.create({
+            gameId: game.id,
+            playerWhite: game.player1,
+            playerBlack: game.player2,
+          });
           this.games.push(game);
           this.pendingUser = null;
         }

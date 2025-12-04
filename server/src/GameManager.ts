@@ -4,43 +4,50 @@ import { INIT_GAME, MOVE } from "./messages";
 import { Move } from "./models/MoveModel";
 import { GameModel } from "./models/GameModel";
 
+export interface PlayerSocket extends WebSocket {
+  userId?: string;
+}
+
 export class GameManager {
   private games: Game[];
-  private users: WebSocket[] = [];
-  private pendingUser: WebSocket | null = null;
+  private users: PlayerSocket[] = [];
+  private pendingUser: PlayerSocket | null = null;
   private chess: any;
 
   constructor() {
     this.games = [];
   }
-  userPlays(socket: WebSocket) {
+  userPlays(socket: PlayerSocket) {
     this.users.push(socket);
     this.addHandler(socket);
   }
 
-  userLeaves(socket: WebSocket) {
+  userLeaves(socket: PlayerSocket) {
     this.users = this.users.filter((user) => {
       return user !== socket;
     });
   }
 
-  private addHandler(socket: WebSocket) {
+  private addHandler(socket: PlayerSocket) {
     socket.on("message", async (data) => {
       const message = JSON.parse(data.toString()); //ensures that our message is a string and not json
       if (message.type === INIT_GAME) {
         if (!this.pendingUser) {
           this.pendingUser = socket;
         } else {
+          // start a new game and add it in database
           const game = new Game(this.pendingUser, socket);
-          // new game created add in db
 
-          await GameModel.create({
+          const newGame = await GameModel.create({
             gameId: game.id,
-            playerWhite: game.player1,
-            playerBlack: game.player2,
+            player1: this.pendingUser!.userId,
+            player2: socket.userId,
+            moves: this.chess.history(),
+            
           });
-          this.games.push(game);
-          this.pendingUser = null;
+          return newGame;
+          // this.games.push(newGame);
+          // this.pendingUser = null;
         }
       }
 

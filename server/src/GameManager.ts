@@ -3,6 +3,7 @@ import { Game } from "./Game";
 import { INIT_GAME, MOVE } from "./messages";
 import { Move } from "./models/MoveModel";
 import { GameModel } from "./models/GameModel";
+import mongoose from "mongoose";
 
 export interface PlayerSocket extends WebSocket {
   userId?: string;
@@ -35,19 +36,17 @@ export class GameManager {
         if (!this.pendingUser) {
           this.pendingUser = socket;
         } else {
-          // start a new game and add it in database
           const game = new Game(this.pendingUser, socket);
 
           const newGame = await GameModel.create({
             gameId: game.id,
-            player1: this.pendingUser!.userId,
-            player2: socket.userId,
-            moves: this.chess.history(),
-            
+            player1: new mongoose.Types.ObjectId(this.pendingUser!.userId),
+            player2: new mongoose.Types.ObjectId(socket.userId),
+            moves: [],
           });
+          this.games.push(game);
+          this.pendingUser = null;
           return newGame;
-          // this.games.push(newGame);
-          // this.pendingUser = null;
         }
       }
 

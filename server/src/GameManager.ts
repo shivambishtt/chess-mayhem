@@ -9,6 +9,7 @@ export interface PlayerSocket extends WebSocket {
   userId?: string;
 }
 
+
 export class GameManager {
   private games: Game[];
   private users: PlayerSocket[] = [];

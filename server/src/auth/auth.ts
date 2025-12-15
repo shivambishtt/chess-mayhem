@@ -9,13 +9,13 @@ interface Token {
 export async function generateAuthToken(
   userId: string,
   expiryTime: string | number
-) {
+): Token {
   const token = jsonwebtoken.sign(
     userId,
     process.env.JWT_SECRET_KEY as string,
     {
       expiresIn: expiryTime || "2d",
-      algorithm: "HS256",   
+      algorithm: "HS256",
     }
   );
   return token;

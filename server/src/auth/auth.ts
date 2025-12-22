@@ -22,6 +22,7 @@ export async function generateAuthToken(
   const refreshTime = new Date();
   const expiryDate = new Date(refreshTime.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 days example
   return {
+    
     jwt: token,
     refreshTime,
     expiryTime: expiryDate,

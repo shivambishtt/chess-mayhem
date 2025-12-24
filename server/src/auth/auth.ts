@@ -8,10 +8,10 @@ interface Token {
 
 export async function generateAuthToken(
   userId: string,
-  expiryTime: string | number
+  expiryTime?: string | number
 ): Promise<Token> {
   const signOptions: SignOptions = {
-    expiresIn: expiryTime || "2d",
+    expiresIn: (expiryTime as string | number) || "2d",
     algorithm: "HS256",
   };
   const token = jsonwebtoken.sign(

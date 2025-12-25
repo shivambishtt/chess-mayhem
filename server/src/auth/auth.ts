@@ -1,4 +1,4 @@
-import jsonwebtoken, { SignOptions } from "jsonwebtoken";
+import jsonwebtoken, { SignOptions, StringValue } from "jsonwebtoken";
 
 interface Token {
   jwt: string;
@@ -8,10 +8,10 @@ interface Token {
 
 export async function generateAuthToken(
   userId: string,
-  expiryTime?: string | number
+  expiryTime?: StringValue
 ): Promise<Token> {
   const signOptions: SignOptions = {
-    expiresIn: (expiryTime as string | number) || "2d",
+    expiresIn: expiryTime ?? "2d",
     algorithm: "HS256",
   };
   const token = jsonwebtoken.sign(
@@ -20,9 +20,8 @@ export async function generateAuthToken(
     signOptions
   );
   const refreshTime = new Date();
-  const expiryDate = new Date(refreshTime.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 days example
+  const expiryDate = new Date(refreshTime.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days example
   return {
-    
     jwt: token,
     refreshTime,
     expiryTime: expiryDate,

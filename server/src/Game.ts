@@ -9,6 +9,7 @@ export class Game {
   public player2: WebSocket | null;
   private board: Chess;
   public id: string;
+  public lastMove: { from: string; to: string } | null = null;
 
   constructor(player1?: WebSocket, player2?: WebSocket, id?: string) {
     this.player1 = player1 || null;
@@ -16,7 +17,6 @@ export class Game {
     this.board = new Chess();
     this.id = id || randomUUID();
 
-    // Only send init to both players if both are provided (new game)
     if (player1 && player2) {
       [this.player1, this.player2].forEach((player, index) => {
         if (!player) {
@@ -24,7 +24,14 @@ export class Game {
           return;
         }
         const color = index === 0 ? "white" : "black";
-        player.send(JSON.stringify({ type: INIT_GAME, payload: { color } }));
+        player.send(JSON.stringify({ 
+          type: INIT_GAME, 
+          payload: { 
+            color,
+            board: this.board.board(),
+            lastMove: this.lastMove,
+          } 
+        }));
       });
     }
   }
@@ -40,7 +47,10 @@ export class Game {
   async replayMoves(moves: any[]) {
     for (const move of moves) {
       try {
-        this.board.move({ from: move.from, to: move.to });
+        const result = this.board.move({ from: move.from, to: move.to });
+        if (result) {
+          this.lastMove = { from: move.from, to: move.to };
+        }
       } catch (err) {
         console.log("Error replaying move", err);
       }
@@ -65,10 +75,17 @@ export class Game {
       return;
     }
 
-    // broadcast move to both players
+    // Update last move
+    this.lastMove = move;
+
+    // broadcast move to both players with board state and last move
     const message = JSON.stringify({
       type: MOVE,
-      payload: move,
+      payload: {
+        move,
+        lastMove: this.lastMove,
+        board: this.board.board(),
+      },
     });
 
     this.player1?.send(message);
@@ -87,5 +104,15 @@ export class Game {
       this.player2?.send(overMsg);
     }
     return move;
+  }
+
+  getLegalMoves(square: string): string[] {
+    try {
+      const moves = this.board.moves({ square: square as any, verbose: true });
+      return moves.map((move: any) => move.to);
+    } catch (err) {
+      console.log("Error getting legal moves", err);
+      return [];
+    }
   }
 }
